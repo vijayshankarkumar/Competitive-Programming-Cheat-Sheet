@@ -11,6 +11,14 @@
   }
  ```
 - ```std::stable_sort``` can be used if the order of input iterator is to be maintained while sorting other wise custom comparator can be used to do so.
+- In quick sort, use two pointer to store all the elements greater than the pivot element while iterating over the array,
+```
+   if (arr[i] < pivot) {
+      swap(arr[left], arr[i]);
+      left++;
+   }
+   right++;
+```
 
 
 ## 2. Binary Search
@@ -33,3 +41,34 @@
 - ```std::lower_bound(input_space.begin(), input_space.end(), target)``` returns the iterator pointing to the first element which is greater than or equal to the target if the input space is sorted by defining < operator while ```std::upper_bound(input_space.begin(), input_space.end(), target)``` returns the first element greater than the target. These two functions also take the optional custom lambda fucntion for comparision.
 
 - ```std::set```, ```std::map``` and ```std::multiset``` also has ```lower_bound``` and ```upper_bound``` methods defined that can be used when the input space is mutable and changing over time.
+
+- To find lower_bound and upper_bound of an element in the given input space, use this
+```
+... // a sorted array is stored as a[0], a[1], ..., a[n-1]
+int lb = -1, ub = n;
+while (ub - lb > 1) {
+    int m = (lb + ub) / 2;
+    if (k < a[m]) {
+        ub = m; // a[l] <= k < a[m] <= a[r]
+    } else {
+        lb = m; // a[l] <= a[m] <= k < a[r]
+    }
+}
+return {lb, ub};
+```
+
+## 2. String
+- Computing hash of string can be used to determine whether two string are equal or not in O(n) time with the probability that collision happens is only $\approx \frac{1}{m}$ . For $m = 10^9 + 9$  the probability is $\approx 10^{-9}$  which is quite low.
+```
+long long compute_hash(string const& s) {
+    const int p = 31;
+    const int m = 1e9 + 9;
+    long long hash_value = 0;
+    long long p_pow = 1;
+    for (char c : s) {
+        hash_value = (hash_value + (c - 'a' + 1) * p_pow) % m;
+        p_pow = (p_pow * p) % m;
+    }
+    return hash_value;
+}
+```
