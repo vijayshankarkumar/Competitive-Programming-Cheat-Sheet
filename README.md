@@ -13,18 +13,21 @@
 - ```std::stable_sort``` can be used if the order of input iterator is to be maintained while sorting other wise custom comparator can be used to do so.
 - In quick sort, use two pointer to store all the elements greater than the pivot element while iterating over the array,
 ```
+   // keep left pointer to the end of sequence less the pivot
    if (arr[i] < pivot) {
-      swap(arr[left], arr[i]);
       left++;
+      swap(arr[left], arr[i]);
    }
    right++;
 ```
 
+- Interval Scheduling Maximization algorithm is used to select the maximum number of non-overlapping intervals (or activities) from a given set of intervals.The idea is to always pick the interval that ends the earliest (and doesn't overlap with previously selected intervals). This strategy ensures that you leave the most room for future intervals to be included. 
+
 
 ## 2. Binary Search
-- Applying binary search over input space need not to be sorted in any order, if the input space specifies whether the target is present or not in constant time then search space can be squeezed to half thus applying binary search will be a feasible move.
+- Binary search can be applied even if the input space is unsorted, as long as the search space allows us to determine in constant time whether the target is present in a specific range. By iteratively halving the search space based on this condition, binary search becomes a feasible and efficient approach.
   
-- If result of optimization stratgy is linear i.e if finding some optimal solution guarantees that the lower optimal solution must exist, in that case you can use binary search over all optimal solution search space *if and only if finding that optimal solution over the input space is possible or not in linear or constant time complexity*.
+- If the result of an optimization strategy is linear, meaning that finding a higher optimal solution ensures the existence of all lower optimal solutions, then binary search can be applied over the entire range of optimal solutions—*provided that determining whether a given solution is optimal can be done in linear or constant time*.
  ```
   auto left = min_possible_search, right = max_possible_search;
   while (left <= right) {
@@ -57,10 +60,10 @@ while (ub - lb > 1) {
 return {lb, ub};
 ```
 
-## 2. String
+## 3. String
 - Computing hash of string can be used to determine whether two string are equal or not in O(n) time with the probability that collision happens is only $\approx \frac{1}{m}$ . For $m = 10^9 + 9$  the probability is $\approx 10^{-9}$  which is quite low.
 ```
-long long compute_hash(string const& s) {
+long long compute_hash(const string& s) {
     const int p = 31;
     const int m = 1e9 + 9;
     long long hash_value = 0;
@@ -71,4 +74,16 @@ long long compute_hash(string const& s) {
     }
     return hash_value;
 }
+```
+
+- Finding longest prefix which is also the suffix at every index in the pattern, is used in KMP string matching algorithm, which is computed like this,
+```
+  vector<int> prefix_function(const string& s) {
+    vector<int> pi(s.size());
+    for (int i = 0; i < s.size(); i++)
+        for (int k = 0; k <= i; k++)
+            if (s.substr(0, k) == s.substr(i-k+1, k))
+                pi[i] = k;
+    return pi;
+ }
 ```
