@@ -28,6 +28,7 @@
 - Binary search can be applied even if the input space is unsorted, as long as the search space allows us to determine in constant time whether the target is present in a specific range. By iteratively halving the search space based on this condition, binary search becomes a feasible and efficient approach.
   
 - If the result of an optimization strategy is linear, meaning that finding a higher optimal solution ensures the existence of all lower optimal solutions, then binary search can be applied over the entire range of optimal solutions—*provided that determining whether a given solution is optimal can be done in linear or constant time*.
+  
  ```
   auto left = min_possible_search, right = max_possible_search;
   while (left <= right) {
@@ -38,6 +39,8 @@
   }
   return left - 1;
  ```
+
+- Binary search can be used to find the last or the nth possible solution within the search space if it follows 1 1 1 1 1 1 0 0 0 0 0 0 0  pattern in serach space. (1 means possible and 0 means not possible)
 
 - Any dynamic programming problem that involves finding optimal solution can be solved using binary search, it cannot be the optmized solution but it still be faster than the brute force. For example finding the longest common substring can be solved in O(n * m) * log (m) time which is slower than O(n * m).
 
@@ -78,12 +81,14 @@ long long compute_hash(const string& s) {
 
 - Finding longest prefix which is also the suffix at every index in the pattern, is used in KMP string matching algorithm, which is computed like this,
 ```
-  vector<int> prefix_function(const string& s) {
+ vector<int> prefix_function(const string& s) {
     vector<int> pi(s.size());
-    for (int i = 0; i < s.size(); i++)
-        for (int k = 0; k <= i; k++)
-            if (s.substr(0, k) == s.substr(i-k+1, k))
-                pi[i] = k;
+    for (int i = 1; i < s.size(); i++) {
+        int j = pi[i-1];
+        while (j > 0 && s[i] != s[j]) j = pi[j-1];
+        if (s[i] == s[j]) j++;
+        pi[i] = j;
+    }
     return pi;
- }
+}
 ```
