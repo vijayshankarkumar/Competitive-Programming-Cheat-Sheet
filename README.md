@@ -1,5 +1,25 @@
 # Competitive-Programming-Cheat-Sheet
 
+## 0. Invariant
+- An invariant of an algorithm is a condition that remains true throughout the execution of the algorithm, typically within a loop or recursive call. Invariants are crucial in ensuring that an algorithm works correctly and terminates as expected.
+
+- When designing any algorithm first define the invariants and check after every step in the execution flow, does invariants hold true, if it does then that algorithm is correct, robust and must stop in finite steps.
+```
+// For example lets see the invariant of binary search, find whether an element x is present in the
+// sorted array of integers a[0...n - 1]
+int l = 0, r = n - 1;
+// Invariant: if the given element is present in the array, it must be in between index l and r
+//            i.e. each step in the execution flow a[l] <= x && x <= a[r].
+//            If the given element is present in the array then l == r hold true in the end.
+while (l < r) {
+   int m = l + (r - l) / 2;
+   if (a[m] < x) l = m + 1;  // Here invairant holds true as the array is sorted and if the target element is present,
+                             // then it should be in the other half of the range [l, r]
+   else r = m;  // As it executes when a[m] >= x, don't ingnore m in the range as a[m] could be equal to x.
+}
+return l == r;
+```
+
 ## 1. Sorting
 - Sorting custom object which ```std::sort``` requires **<** operator to be defined by the class of that object, but keep in mind while defining **<** operator it follows weak comparison i.e if a < b and b < c then a < c.
  ```
@@ -13,10 +33,11 @@
 - ```std::stable_sort``` can be used if the order of input iterator is to be maintained while sorting other wise custom comparator can be used to do so.
 - In quick sort, use two pointer to store all the elements greater than the pivot element while iterating over the array,
 ```
-   // keep left pointer to the end of sequence less the pivot
-   if (arr[i] < pivot) {
+   // keep left pointer to the end of sequence less the pivot and
+   // right pointer to the start of the sequence which is greater or equal to pivot
+   if (arr[right] < pivot) {
       left++;
-      swap(arr[left], arr[i]);
+      swap(arr[left], arr[right]);
    }
    right++;
 ```
@@ -25,16 +46,31 @@
 
 
 ## 2. Binary Search
+- Designing binary search solution can be tricky as one can make mistake in defining the invariants or somes step does not holds true for the defined invaraints during the execution  of the algorithm.
+```
+// Find the index of the given element x in the sorted array a[0....n - 1] if it exists.
+int l = 0, r = n;
+// Invariant: l -> points to the last element which is less than x.
+              r -> points to the first element which is greater than or equal to x.
+              In the end return r as r points to target element x or npos if it does not exist.
+while (r - l > 1) {
+   int m = l + (r - l) / 2;
+   if (a[m] < x) l = m; // Note that m is always in the range [0, n -1] as m is calculated using integer division
+   else r = m;
+}
+return r;
+```
+   
 - Binary search can be applied even if the input space is unsorted, as long as the search space allows us to determine in constant time whether the target is present in a specific range. By iteratively halving the search space based on this condition, binary search becomes a feasible and efficient approach.
   
 - If the result of an optimization strategy is linear, meaning that finding a higher optimal solution ensures the existence of all lower optimal solutions, then binary search can be applied over the entire range of optimal solutions—*provided that determining whether a given solution is optimal can be done in linear or constant time*.
   
  ```
   auto left = min_possible_search, right = max_possible_search;
-  // left -> points to last solution which is possible
-  // right -> points to first solution which is not possible
+  // Invariant:  left -> points to last solution which is possible
+  //              right -> points to first solution which is not possible
   while (right - left > 1) {
-    auto mid = (left + right) / 2;
+    auto mid = l + (r - l) / 2;
     // function possible return bool, whether mid can be optimal solution or not
     if (possible(input_space.begin(), input_space.end(), mid) left = mid;
     else right = mid;
@@ -54,13 +90,12 @@
 ```
 ... // a sorted array is stored as a[0], a[1], ..., a[n-1]
 int lb = -1, ub = n;
+// Invariant: lb -> points to the first element which is greater than or equal to the target x
+//            ub -> points to the first element which is greater than the target x
 while (ub - lb > 1) {
-    int m = (lb + ub) / 2;
-    if (k < a[m]) {
-        ub = m; // a[l] <= k < a[m] <= a[r]
-    } else {
-        lb = m; // a[l] <= a[m] <= k < a[r]
-    }
+    int m = lb + (ub - lb) / 2;
+    if (a[m] <= x) lb = m;
+    else ub = m;
 }
 return {lb, ub};
 ```
