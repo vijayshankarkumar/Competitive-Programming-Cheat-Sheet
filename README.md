@@ -9,15 +9,16 @@
 // sorted array of integers a[0...n - 1]
 int l = 0, r = n - 1;
 // Invariant: if the given element is present in the array, it must be in between index l and r
-//            i.e. each step in the execution flow a[l] <= x && x <= a[r].
+//            i.e. each step in the execution flow a[l] < x && a[r] > x.
 //            If the given element is present in the array then l == r hold true in the end.
-while (l < r) {
+while (l <= r) {
    int m = l + (r - l) / 2;
+   if (a[m] == x) return true;
    if (a[m] < x) l = m + 1;  // Here invairant holds true as the array is sorted and if the target element is present,
                              // then it should be in the other half of the range [l, r]
-   else r = m;  // As it executes when a[m] >= x, don't ingnore m in the range as a[m] could be equal to x.
+   else r = m - 1;
 }
-return l == r;
+return false;
 ```
 
 ## 1. Sorting
@@ -49,16 +50,17 @@ return l == r;
 - Designing binary search solution can be tricky as one can make mistake in defining the invariants or somes step does not holds true for the defined invaraints during the execution  of the algorithm.
 ```
 // Find the index of the given element x in the sorted array a[0....n - 1] if it exists.
-int l = 0, r = n;
+int l = 0, r = n - 1;
 // Invariant: l -> points to the last element which is less than x.
-              r -> points to the first element which is greater than or equal to x.
-              In the end return r as r points to target element x or npos if it does not exist.
-while (r - l > 1) {
+              r -> points to the first element which is greater than x.
+              In the end return if the target is present the l and r converge to a single index
+while (l <= r) {
    int m = l + (r - l) / 2;
-   if (a[m] < x) l = m; // Note that m is always in the range [0, n -1] as m is calculated using integer division
-   else r = m;
+   if (a[m] == x) return m;
+   else if (a[m] < x) l = m + 1; // Note that m is always in the range [0, n -1] as m is calculated using integer division
+   else r = m - 1;
 }
-return r;
+return -1;
 ```
    
 - Binary search can be applied even if the input space is unsorted, as long as the search space allows us to determine in constant time whether the target is present in a specific range. By iteratively halving the search space based on this condition, binary search becomes a feasible and efficient approach.
@@ -85,6 +87,31 @@ return r;
 - ```std::lower_bound(input_space.begin(), input_space.end(), target)``` returns the iterator pointing to the first element which is greater than or equal to the target if the input space is sorted by defining < operator while ```std::upper_bound(input_space.begin(), input_space.end(), target)``` returns the first element greater than the target. These two functions also take the optional custom lambda fucntion for comparision.
 
 - ```std::set```, ```std::map``` and ```std::multiset``` also has ```lower_bound``` and ```upper_bound``` methods defined that can be used when the input space is mutable and changing over time.
+
+```
+// This is the stl implementation of std::lower_bound...
+ _DistanceType __len = std::distance(__first, __last);
+while (__len > 0)
+{
+	  _DistanceType __half = __len >> 1;
+	  _ForwardIterator __middle = __first;
+	  std::advance(__middle, __half);
+	  if (__comp(__middle, __val))  \\ While defining custom comparator for std::lower_bound, follow this 
+	    {                           \\ comparator function defnition. It should return true __middle < __val
+	      __first = __middle;
+	      ++__first;
+	      __len = __len - __half - 1;
+	    }
+	  else
+	    __len = __half;
+}
+return __first;
+
+// Define comparator function like this
+bool operator<(const Custom& obj, T val) const {
+   // return true if obj is less than val
+}
+```
 
 - To find lower_bound and upper_bound of an element in the given input space, use this
 ```
