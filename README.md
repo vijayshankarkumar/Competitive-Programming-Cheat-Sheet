@@ -31,13 +31,15 @@
   
  ```
   auto left = min_possible_search, right = max_possible_search;
-  while (left <= right) {
+  // left -> points to last solution which is possible
+  // right -> points to first solution which is not possible
+  while (right - left > 1) {
     auto mid = (left + right) / 2;
     // function possible return bool, whether mid can be optimal solution or not
-    if (possible(input_space.begin(), input_space.end(), mid) left = ++mid;
-    else right = --mid;
+    if (possible(input_space.begin(), input_space.end(), mid) left = mid;
+    else right = mid;
   }
-  return left - 1;
+  return left;
  ```
 
 - Binary search can be used to find the last or the nth possible solution within the search space if it follows 1 1 1 1 1 1 0 0 0 0 0 0 0  pattern in serach space. (1 means possible and 0 means not possible)
