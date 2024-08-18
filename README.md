@@ -14,7 +14,8 @@ int l = 0, r = n - 1;
 while (l <= r) {
    int m = l + (r - l) / 2;
    if (a[m] == x) return true;
-   if (a[m] < x) l = m + 1;  // Here invairant holds true as the array is sorted and if the target element is present,
+   if (a[m] < x) l = m + 1;  // Here invairant holds true as the array is sorted and
+                             // if the target element is present,
                              // then it should be in the other half of the range [l, r]
    else r = m - 1;
 }
@@ -27,7 +28,8 @@ return false;
  class Custom {
    public:
       bool operator<(const Custom& other) const {
-          // do weak comparison here and return whether this object is less than the other or not
+          // do weak comparison here and return whether
+          // this object is less than the other or not
       }
   }
  ```
@@ -57,7 +59,8 @@ int l = 0, r = n - 1;
 while (l <= r) {
    int m = l + (r - l) / 2;
    if (a[m] == x) return m;
-   else if (a[m] < x) l = m + 1; // Note that m is always in the range [0, n -1] as m is calculated using integer division
+   else if (a[m] < x) l = m + 1; // Note that m is always in the range [0, n -1]
+                                 // as m is calculated using integer division
    else r = m - 1;
 }
 return -1;
@@ -96,8 +99,9 @@ while (__len > 0)
 	  _DistanceType __half = __len >> 1;
 	  _ForwardIterator __middle = __first;
 	  std::advance(__middle, __half);
-	  if (__comp(__middle, __val))  \\ While defining custom comparator for std::lower_bound, follow this 
-	    {                           \\ comparator function defnition. It should return true __middle < __val
+	  if (__comp(__middle, __val))  // While defining custom comparator for std::lower_bound,
+                                        // follow this comparator function
+	    {                           // defnition. It should return true __middle < __val
 	      __first = __middle;
 	      ++__first;
 	      __len = __len - __half - 1;
