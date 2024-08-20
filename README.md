@@ -1,4 +1,4 @@
-# Competitive-Programming-Cheat-Sheet
+# Competitive Programming Cheat Sheet
 
 ## 0. Invariant
 - An invariant of an algorithm is a condition that remains true throughout the execution of the algorithm, typically within a loop or recursive call. Invariants are crucial in ensuring that an algorithm works correctly and terminates as expected.
@@ -21,6 +21,8 @@ while (l <= r) {
 }
 return false;
 ```
+
+- For example, in Dijkstra's algorithm, the main invariant is that once a node's shortest path estimate is marked as "final" (i.e., the node is added to the set of processed nodes), this estimate is indeed the shortest possible path from the source to that node. This invariant ensures the correctness of the algorithm. 
 
 ## 1. Sorting
 - Sorting custom object which ```std::sort``` requires **<** operator to be defined by the class of that object, but keep in mind while defining **<** operator it follows weak comparison i.e if a < b and b < c then a < c.
