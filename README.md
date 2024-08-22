@@ -136,7 +136,7 @@ return {lb, ub};
 ## 3. String
 - Computing hash of string can be used to determine whether two string are equal or not in O(n) time with the probability that collision happens is only $\approx \frac{1}{m}$ . For $m = 10^9 + 9$  the probability is $\approx 10^{-9}$  which is quite low.
 ```cpp
-long long compute_hash(const string& s) {
+long long compute_hash(const std::string& s) {
     const int p = 31;
     const int m = 1e9 + 9;
     long long hash_value = 0;
@@ -151,8 +151,8 @@ long long compute_hash(const string& s) {
 
 - Finding longest prefix which is also the suffix at every index in the pattern, is used in KMP string matching algorithm, which is computed like this,
 ```cpp
- vector<int> prefix_function(const string& s) {
-    vector<int> pi(s.size());
+ vector<int> prefix_function(const std::string& s) {
+    std::vector<int> pi(s.size());
     for (int i = 1; i < s.size(); i++) {
         int j = pi[i-1];
         while (j > 0 && s[i] != s[j]) j = pi[j-1];
@@ -173,10 +173,10 @@ The first time a node is discovered during a traversal (either BFS or DFS), it i
 BFS is generally preferred because it explicitly explores all nodes at the present depth level before moving on to nodes at the next depth level, ensuring that the first time a node is reached, it is by the shortest path. However, in the context of a tree, DFS will also work since there are no cycles, and the first encounter of a node via DFS is along the shortest path as well.
 
 ```cpp
-   int bfs(int start, int end, const vector<vector<pair<int, int>>>& tree) {
-          queue<int> q;
-          vector<int> dis(tree.size());
-          vector<bool> vis(tree.size());
+   int bfs(int start, int end, const std::vector<std::vector<std::pair<int, int>>>& tree) {
+          std::queue<int> q;
+          std::vector<int> dis(tree.size());
+          std::vector<bool> vis(tree.size());
           q.push(start);
           dis[start] = 0;
           vis[start] = true;
@@ -201,10 +201,10 @@ BFS ensures that the first time a node is reached, it is by the shortest path, a
 DFS does not guarantee finding the shortest path in graphs with cycles, as it may explore a longer path before backtracking.
 
 ```cpp
-    int bfs(int start, int end, const vector<vector<int>>& graph) {
-          queue<int> q;
-	  vector<int> dis(graph.size());
-	  vector<bool> vis(graph.size());
+    int bfs(int start, int end, const std::vector<std::vector<int>>& graph) {
+          std::queue<int> q;
+	  std::vector<int> dis(graph.size());
+	  std::vector<bool> vis(graph.size());
 	  q.push(start);
           int level = 0;
           vis[start] = true;
@@ -235,9 +235,9 @@ Dijkstra's Algorithm is efficient for graphs with non-negative edge weights and 
 Bellman-Ford Algorithm can handle graphs with negative edge weights and will also detect if a negative-weight cycle exists.
 
 ```cpp
-	void dijkstra(int start, int end, const vector<vector<pair<int, int>>& graph) {
-	    set<pair<int, int>> q;
-            vector<int> dis(graph.size(), INT_MAX);
+	void dijkstra(int start, int end, const std::vector<std::vector<std::pair<int, int>>& graph) {
+	    std::set<std::pair<int, int>> q;
+            std::vector<int> dis(graph.size(), INT_MAX);
 	    q.insert({0, s});
 	    while (!q.empty()) {
 	        int from = q.begin()->second;
@@ -254,6 +254,82 @@ Bellman-Ford Algorithm can handle graphs with negative edge weights and will als
 	    }
             return dis[end];
 	}
+
+    // The trick Dijkstra's Algorithm uses to find the shortest path is when it releases a
+    // a node from the set of active nodes. It greadly chooses the node with shortest calculated distance
+    // as it correctly update the distance of the node which are already present in the set of
+    // active nodes, lets see
+
+   //      0
+   //    /   \
+   //   2     6
+   //  /       \
+   // 1---3-----2
+
+  // In the above scenerio, at one point in the executiion of algorithm
+  // set of active nodes = {1, 2} with distance 2 and 6 respenctively, if you
+  // chose node 2 to eliminate first then it calculated distance will be 2 and 6
+  // respectively which is wrong, it shoulde 2 and 5  
 ```
 
 - When finding the path between two nodes during **BFS** or **DFS** traversal, maintaining a **parent** array is often more efficient and intuitive than relying on a **stack** to reconstruct the path. The **parent** array directly stores the predecessor of each node, making it straightforward to trace the path from the destination node back to the start node.
+
+- opological sorting is a linear ordering of vertices in a directed acyclic graph (DAG) such that for every directed edge u → v, vertex  𝑢 comes before vertex 𝑣 in the ordering. This concept is particularly useful in scenarios like task scheduling, where certain tasks must be performed before others.
+
+```cpp
+void topologicalSortDFS(int v, std::vector<bool>& visited, std::stack<int>& st, cosnt std::vector<std::vector<int>>& adj) {
+    visited[v] = true;
+    for (int i : adj[v]) {
+        if (!visited[i]) topologicalSortDFS(i, visited, Stack, adj);
+    }
+    st.push(v); // Add the current node after visiting of its descendents
+}
+
+
+void topologicalSortBFS(int V, std::vector<std::vector<int>> &adj) {
+    std::vector<int> in_degree(V, 0);
+    // Calculate in-degree of each vertex
+    for (int u = 0; u < V; u++) {
+        for (int v : adj[u]) {
+            in_degree[v]++;
+        }
+    }
+    // Create a queue to store vertices with in-degree 0
+    std::queue<int> q;
+    for (int i = 0; i < V; i++) {
+        if (in_degree[i] == 0) {
+            q.push(i);
+        }
+    }
+    // Initialize a counter to count visited vertices
+    int count = 0;
+    // Vector to store the result (i.e., topological order)
+    std::vector<int> top_order;
+    // Process vertices in the queue
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+        top_order.push_back(u);
+        // Decrease in-degree of all adjacent vertices
+        for (int v : adj[u]) {
+            in_degree[v]--;
+            // If in-degree becomes 0, add it to the queue
+            if (in_degree[v] == 0) {
+                q.push(v);
+            }
+        }
+        count++;
+    }
+
+    // Check if there was a cycle
+    if (count != V) {
+        std::cout << "There exists a cycle in the graph\n";
+    } else {
+        // Print the topological order
+        for (int i : top_order) {
+            std::cout << i << " ";
+        }
+        std::cout << "\n";
+    }
+}
+```
