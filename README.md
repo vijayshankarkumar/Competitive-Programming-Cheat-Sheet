@@ -218,7 +218,8 @@ DFS does not guarantee finding the shortest path in graphs with cycles, as it ma
                      for (const auto& v : graph[u]) {
                          if (!vis[v]) {
                             q.push(v);
-                            vis[v] = true; // mark the node visited when the first time it is discovered
+                            vis[v] = true; // mark the node visited when the first time
+                                           // it is discovered
                             dis[v] = leve;
                          }
                      }
@@ -255,10 +256,11 @@ Bellman-Ford Algorithm can handle graphs with negative edge weights and will als
             return dis[end];
 	}
 
-    // The trick Dijkstra's Algorithm uses to find the shortest path is when it releases a
-    // a node from the set of active nodes. It greadly chooses the node with shortest calculated distance
-    // as it correctly update the distance of the node which are already present in the set of
-    // active nodes, lets see
+    // The trick Dijkstra's Algorithm uses to find the shortest path is when
+    // it releases a node from the set of active nodes. It greadly chooses
+    // the node with shortest calculated distance as it correctly update the
+    // distance of the node which are already present in the set of active nodes,
+    // lets see
 
    //      0
    //    /   \
@@ -277,7 +279,8 @@ Bellman-Ford Algorithm can handle graphs with negative edge weights and will als
 - opological sorting is a linear ordering of vertices in a directed acyclic graph (DAG) such that for every directed edge u → v, vertex  𝑢 comes before vertex 𝑣 in the ordering. This concept is particularly useful in scenarios like task scheduling, where certain tasks must be performed before others.
 
 ```cpp
-void topologicalSortDFS(int v, std::vector<bool>& visited, std::stack<int>& st, cosnt std::vector<std::vector<int>>& adj) {
+void topologicalSortDFS(int v, std::vector<bool>& visited, std::stack<int>& st,
+                               const std::vector<std::vector<int>>& adj) {
     visited[v] = true;
     for (int i : adj[v]) {
         if (!visited[i]) topologicalSortDFS(i, visited, Stack, adj);
