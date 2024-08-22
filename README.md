@@ -85,7 +85,7 @@ return -1;
   return left;
  ```
 
-- Binary search can be used to find the last or the nth possible solution within the search space if it follows 1 1 1 1 1 1 0 0 0 0 0 0 0  pattern in serach space. (1 means possible and 0 means not possible)
+- Binary search can be used to find the last or the nth possible solution within the search space if it follows 1 1 1 1 1 1 0 0 0 0 0 0 0  pattern in serach space. (1 means possible and 0 means not possible). For example, this pattern arises in finding the kth smallest or larget element in the sequence where finding the complete sequence is not feasible. In that case, define **left** as the number of elements which are smaller than or equal to **K** and **right** as the number of elements which are greater than **k** and perform binary search over **left** and **right**, then in the end **left** will point to kth smallest element.
 
 - Any dynamic programming problem that involves finding optimal solution can be solved using binary search, it cannot be the optmized solution but it still be faster than the brute force. For example finding the longest common substring can be solved in O(n * m) * log (m) time which is slower than O(n * m).
 
@@ -162,3 +162,98 @@ long long compute_hash(const string& s) {
     return pi;
 }
 ```
+
+## 3. Graph Theory
+- Finding the shortest path from a start node to an end node is a fundamental problem in graph theory. Different graph structures require different algorithms to efficiently determine the shortest path.
+
+- Case 1: Trees
+A tree is a special type of graph with no cycles and exactly one path between any two nodes. In a tree, both BFS (Breadth-First Search) and DFS (Depth-First Search) can be used to find the shortest path between the start and end nodes. This is because, in a tree:
+
+The first time a node is discovered during a traversal (either BFS or DFS), it is reached via the shortest path from the start node.
+BFS is generally preferred because it explicitly explores all nodes at the present depth level before moving on to nodes at the next depth level, ensuring that the first time a node is reached, it is by the shortest path. However, in the context of a tree, DFS will also work since there are no cycles, and the first encounter of a node via DFS is along the shortest path as well.
+
+```cpp
+   int bfs(int start, int end, const vector<vector<pair<int, int>>>& tree) {
+          queue<int> q;
+          vector<int> dis(tree.size());
+          vector<bool> vis(tree.size());
+          q.push(start);
+          dis[start] = 0;
+          vis[start] = true;
+          while (!q.empty()) {
+                auto u = q.front();
+                q.pop();
+                for (const auto& v : tree[u]) {
+                    if (!vis[v.first]) {
+                       dis[v.first] = dis[u] + v.second;
+                       vis[v.first] = true;
+                    }
+                } 
+          }
+          return dis[end];
+   }
+```
+
+- Case 2: General Graphs (with cycles)
+In a general graph, especially one that may contain cycles, BFS is typically used to find the shortest path in an unweighted graph:
+
+BFS ensures that the first time a node is reached, it is by the shortest path, as it explores all neighbors of a node before moving on to the next level.
+DFS does not guarantee finding the shortest path in graphs with cycles, as it may explore a longer path before backtracking.
+
+```cpp
+    int bfs(int start, int end, const vector<vector<int>>& graph) {
+          queue<int> q;
+	  vector<int> dis(graph.size());
+	  vector<bool> vis(graph.size());
+	  q.push(start);
+          int level = 0;
+          vis[start] = true;
+          dis[start] = 0;
+	  while (!q.empty()) {
+		int sz = q.size();
+                level++;
+                // do a level order traversal
+                while (sz--) {
+                     auto u = q.front();
+                     for (const auto& v : graph[u]) {
+                         if (!vis[v]) {
+                            q.push(v);
+                            vis[v] = true; // mark the node visited when the first time it is discovered
+                            dis[v] = leve;
+                         }
+                     }
+                }
+	  }
+	  return dis[end]; 
+    }
+```
+
+- Case 3: Weighted Graphs
+For graphs with weighted edges, neither simple BFS nor DFS will find the shortest path efficiently. Instead, algorithms like Dijkstra's Algorithm or Bellman-Ford Algorithm are used:
+
+Dijkstra's Algorithm is efficient for graphs with non-negative edge weights and finds the shortest path from the start node to all other nodes.
+Bellman-Ford Algorithm can handle graphs with negative edge weights and will also detect if a negative-weight cycle exists.
+
+```cpp
+	void dijkstra(int start, int end, const vector<vector<pair<int, int>>& graph) {
+	    set<pair<int, int>> q;
+            vector<int> dis(graph.size(), INT_MAX);
+	    q.insert({0, s});
+	    while (!q.empty()) {
+	        int from = q.begin()->second;
+	        q.erase(q.begin());
+	        for (cosnt auto& edge : graph[from]) {
+	            int to = edge.first;
+	            int len = edge.second;
+	            if (dis[from] + len < d[to]) {
+	                q.erase({dis[to], to});
+	                d[to] = dis[from] + len;
+	                q.insert({dis[to], to});
+	            }
+	        }
+	    }
+            return dis[end];
+	}
+```
+
+- When finding the path between two nodes during **BFS** or **DFS** traversal, maintaining a **parent** array is often more efficient and intuitive than relying on a **stack** to reconstruct the path. The **parent** array directly stores the predecessor of each node, making it straightforward to trace the path from the destination node back to the start node.
