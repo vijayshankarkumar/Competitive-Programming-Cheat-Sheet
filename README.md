@@ -5,12 +5,15 @@
 
 - When designing any algorithm first define the invariants and check after every step in the execution flow, does invariants hold true, if it does then that algorithm is correct, robust and must stop in finite steps.
 ```cpp
-// For example lets see the invariant of binary search, find whether an element x is present in the
+// For example lets see the invariant of binary search, find whether
+// an element x is present in the
 // sorted array of integers a[0...n - 1]
 int l = 0, r = n - 1;
-// Invariant: if the given element is present in the array, it must be in between index l and r
+// Invariant: if the given element is present in the array,
+//            it must be in between index l and r
 //            i.e. each step in the execution flow a[l] < x && a[r] > x.
-//            If the given element is present in the array then l == r hold true in the end.
+//            If the given element is present in the
+//            array then l == r hold true in the end.
 while (l <= r) {
    int m = l + (r - l) / 2;
    if (a[m] == x) return true;
@@ -236,7 +239,8 @@ Dijkstra's Algorithm is efficient for graphs with non-negative edge weights and 
 Bellman-Ford Algorithm can handle graphs with negative edge weights and will also detect if a negative-weight cycle exists.
 
 ```cpp
-	void dijkstra(int start, int end, const std::vector<std::vector<std::pair<int, int>>& graph) {
+	void dijkstra(int start, int end,
+                      const std::vector<std::vector<std::pair<int, int>>& graph) {
 	    std::set<std::pair<int, int>> q;
             std::vector<int> dis(graph.size(), INT_MAX);
 	    q.insert({0, s});
