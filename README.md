@@ -340,3 +340,5 @@ void topologicalSortBFS(int V, std::vector<std::vector<int>> &adj) {
     }
 }
 ```
+
+- For mutli-source shortest path or traversal on any variants of the graph, use **BFS** and add all the sources to the **queue** initially.
