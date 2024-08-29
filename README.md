@@ -342,3 +342,44 @@ void topologicalSortBFS(int V, std::vector<std::vector<int>> &adj) {
 ```
 
 - For mutli-source shortest path or traversal on any variants of the graph, use **BFS** and add all the sources to the **queue** initially.
+  
+- The edge which leads to unvisited node during **DFS** is **tree edge** and the edge which leads to the current node present in the recursion node is **back edge**, it you encounter a **back edge** during **DFS** then the graph contains a cycle.
+  ```cpp
+   void dfs(int u, const std::vector<std::vector<int>>& gr,
+                         std::vector<bool>& vis,
+                         std::unordered_set<int>& rec) {
+          vis[u] = true;
+          rec.insert(u);
+          for (const auto& v : gr[u]) {
+              if (rec.find(v) != rec.end()) {
+                  // This is the back edge, so graph
+                 // contains a cycle.
+              }
+          }
+          rec.erase(u);
+   }
+  ```
+
+- A graph is bipartile if and only if it is two-colorable.
+  ```cpp
+     void is_bipartile(const std::vector<std::vector<int>>& gr) {
+           std::queue<int> q;
+           std::vector<int> color(gr.size(), -1);
+           q.push(0);
+           color[0] = 1;
+           while (!q.empty()) {
+                auto u = q.front();
+                q.pop();
+                for (const auto& v : gr[u]) {
+                    if (colors[v] == colors[u]) {
+                        // can't be two colorable
+                        return false;
+                   }
+                   if (colors[v] == -1) {
+                       // If node is colored yet
+                       colors[v] = 1 - colors[u];
+                   }
+                }
+           }
+    }
+  ```
