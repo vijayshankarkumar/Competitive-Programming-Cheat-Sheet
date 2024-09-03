@@ -383,3 +383,37 @@ void topologicalSortBFS(int V, std::vector<std::vector<int>> &adj) {
            }
     }
   ```
+- For finding a shortest path from **src** to **dest** node, maintain a **parent** array during execution of dijkstra algorithm but for finding all shortest path from **src** to **dest** node, run dijkstra algorithm from **src** to **dest** and from **dest** to **src** and transverse through the graph, to check if the current is included the shortest path, if **dist1[node] + dist2[node] == shotest_path_from_src_to_dist i.e dist1[dest]** then this node is included or use backtrack from **dest** node to **src** node to find all the shortest paths.
+  ```
+     std::vector<std::vector<int>> all_shortest_path(
+                         int src,
+                         int dest,
+                         const std::vector<std::vector<std::pair<int, int>>>& graph) {
+           std::vector<int> dist = dijkstra(src, dest, graph);
+           std::vector<int> path;
+           std::vector<std::vector<int>> allPaths;
+           backtrack(dest, src, graph, dist, path, allPaths);
+           return allPaths;
+     }
+
+	  void backtrack(int node, int src,
+                        const std::vector<std::vector<std::pair<int, int>>>& adj,
+                        const std::vector<int>& dist, std::vector<int>& path,
+                        std::vector<vector<int>>& allPaths) {
+	    if (node == src) {
+	        path.push_back(node);
+	        std::reverse(path.begin(), path.end());
+	        allPaths.push_back(path);
+	        std::reverse(path.begin(), path.end());
+	        path.pop_back();
+	        return;
+	    }
+	    path.push_back(node);
+	    for (const auto& [v, d] : adj[node]) {
+	        if (dist[v] == dist[node] - d) {
+	            backtrack(neighbor, src, adj, dist, path, allPaths);
+	        }
+	    }
+	    path.pop_back();
+	}
+  ```
