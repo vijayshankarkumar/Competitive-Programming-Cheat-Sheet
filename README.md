@@ -383,8 +383,23 @@ void topologicalSortBFS(int V, std::vector<std::vector<int>> &adj) {
            }
     }
   ```
-- For finding a shortest path from **src** to **dest** node, maintain a **parent** array during execution of dijkstra algorithm but for finding all shortest path from **src** to **dest** node, run dijkstra algorithm from **src** to **dest** and from **dest** to **src** and transverse through the graph, to check if the current is included the shortest path, if **dist1[node] + dist2[node] == shotest_path_from_src_to_dist i.e dist1[dest]** then this node is included or use backtrack from **dest** node to **src** node to find all the shortest paths.
+  
+- During **DFS** traversal on a tree, if the tree is re-rooted on the current node **u** then the **parent** array of this tree only changes for all the nodes which are currenty in the recursion stack during **DFS** i.e. ** for all nodes in recursion stack parent[parent[node]] = node**
+
+- To find the number of edges in a component of a graph, do **DFS** in that component and count all the edges with visited or not visited node and divide it by 2
+  ```cpp
+     void dfs(int u, const std::vector<std::vector<int>>& gr, int& edges) {
+          vis[u] = true;
+          for (const auto& v : gr[u]) {
+              edges++;
+              if (!vis[v]) dfs(u, gr, edges);
+          }
+     }
+     // no of edges in the component of graph = edges / 2
   ```
+  
+- For finding a shortest path from **src** to **dest** node, maintain a **parent** array during execution of dijkstra algorithm but for finding all shortest path from **src** to **dest** node, run dijkstra algorithm from **src** to **dest** and from **dest** to **src** and transverse through the graph, to check if the current is included the shortest path, if **dist1[node] + dist2[node] == shotest_path_from_src_to_dist i.e dist1[dest]** then this node is included or use backtrack from **dest** node to **src** node to find all the shortest paths.
+  ```cpp
      std::vector<std::vector<int>> all_shortest_path(
                          int src,
                          int dest,
