@@ -386,7 +386,7 @@ void topologicalSortBFS(int V, std::vector<std::vector<int>> &adj) {
   
 - During **DFS** traversal on a tree, if the tree is re-rooted on the current node **u** then the **parent** array of this tree only changes for all the nodes which are currenty in the recursion stack during **DFS** i.e. ** for all nodes in recursion stack parent[parent[node]] = node**
 
-- To find the number of edges in a component of a graph, do **DFS** in that component and count all the edges with visited or not visited node and divide it by 2
+- In **DFS** traversal of an undirected graph, every edge is visited twice once as a **tree edge** and once as a **back edge**.
   ```cpp
      void dfs(int u, const std::vector<std::vector<int>>& gr, int& edges) {
           vis[u] = true;
