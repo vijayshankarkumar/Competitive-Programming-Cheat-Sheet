@@ -166,6 +166,34 @@ long long compute_hash(const std::string& s) {
 }
 ```
 
+- Trie Data-Structure
+  ```cpp
+  const int K = 26;
+  struct Node {
+    int next[K];
+    bool end = false;
+
+    Node() {
+        std::fill(std::begin(next), std::end(next), -1);
+    }
+  };
+  
+  std::vector<Vertex> trie(1);
+
+  void add_string(std::string const& s) {
+    int v = 0;
+    for (char ch : s) {
+        int c = ch - 'a';
+        if (trie[v].next[c] == -1) {
+            trie[v].next[c] = trie.size();
+            trie.emplace_back();
+        }
+        v = trie[v].next[c];
+    }
+    trie[v].end = true;
+  }
+  ```
+
 ## 3. Graph Theory
 - Finding the shortest path from a start node to an end node is a fundamental problem in graph theory. Different graph structures require different algorithms to efficiently determine the shortest path.
 
