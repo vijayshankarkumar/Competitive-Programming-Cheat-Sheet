@@ -50,7 +50,9 @@ return false;
    right++;
 ```
 
-- Interval Scheduling Maximization algorithm is used to select the maximum number of non-overlapping intervals (or activities) from a given set of intervals.The idea is to always pick the interval that ends the earliest (and doesn't overlap with previously selected intervals). This strategy ensures that you leave the most room for future intervals to be included. 
+- Interval Scheduling Maximization algorithm is used to select the maximum number of non-overlapping intervals (or activities) from a given set of intervals.The idea is to always pick the interval that ends the earliest (and doesn't overlap with previously selected intervals). This strategy ensures that you leave the most room for future intervals to be included.
+
+- If first and last element of the sorted array is same then all the elements are same, this seems obvious but lets take a scenerio where you have to check if all the elements of a mutable array has frequence or not, then you can take a sorted set data structure such has **std::multiset<int>** which stores the frequency of all the elements and check whether first element is equal to the last element in the set or not. 
 
 
 ## 2. Binary Search
