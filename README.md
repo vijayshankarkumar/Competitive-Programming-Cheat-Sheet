@@ -98,6 +98,8 @@ return -1;
 
 - ```std::set```, ```std::map``` and ```std::multiset``` also has ```lower_bound``` and ```upper_bound``` methods defined that can be used when the input space is mutable and changing over time.
 
+- Two Pointer and Sliding Window Technique are just the special case of binary search, if the search space is only increasing / decreasing at both ends, i.e. left and right end, then these techinque can be used to get **O(log(n))** time complexity rather than doing binary search multiple time that takes **O(n(log(n)))** time.
+
 ```cpp
 // This is the stl implementation of std::lower_bound...
  _DistanceType __len = std::distance(__first, __last);
