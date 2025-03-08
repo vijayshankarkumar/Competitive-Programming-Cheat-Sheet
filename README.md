@@ -394,11 +394,11 @@ void topologicalSortBFS(int V, std::vector<std::vector<int>> &adj) {
 
 - A graph is bipartile if and only if it is two-colorable.
   ```cpp
-     void is_bipartile(const std::vector<std::vector<int>>& gr) {
+     bool is_bipartile(const std::vector<std::vector<int>>& gr) {
            std::queue<int> q;
-           std::vector<int> color(gr.size(), -1);
+           std::vector<int> colors(gr.size(), -1);
            q.push(0);
-           color[0] = 1;
+           colors[0] = 1;
            while (!q.empty()) {
                 auto u = q.front();
                 q.pop();
@@ -410,9 +410,11 @@ void topologicalSortBFS(int V, std::vector<std::vector<int>> &adj) {
                    if (colors[v] == -1) {
                        // If node is colored yet
                        colors[v] = 1 - colors[u];
+  		       q.push(v);
                    }
                 }
            }
+           return true;
     }
   ```
   
